@@ -49,18 +49,24 @@ void test4(const char* msg)
 void test5(const char* msg)
 {
   setNode(a,1,b,c);
-  setNode(b,2,NULL,d);
-  setNode(c,3,NULL,NULL);
-  setNode(d,4,NULL,NULL);
+  setNode(b,2,NULL,NULL);
+  setNode(c,2,NULL,NULL);
+  setNode(c,3,e,NULL);
+  setNode(b,3,NULL,NULL);
+//  setNode(d,4,NULL,NULL);
+//  setNode(e,4,NULL,NULL);
   cout << msg << ": " <<   equalPaths(a) << endl;
 }
 
 int main()
 {
+    std::cout << "working" << std::endl;
   a = new Node(1);
   b = new Node(2);
   c = new Node(3);
   d = new Node(4);
+  e = new Node(5);
+  f = new Node(6);
 
   test1("Test1");
   test2("Test2");

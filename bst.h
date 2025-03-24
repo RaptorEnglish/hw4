@@ -35,6 +35,15 @@ public:
     void setRight(Node<Key, Value>* right);
     void setValue(const Value &value);
 
+    // print node
+    void print_node() {
+        std::cout << this->getKey() << ": " << this->getValue() << std::endl;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const Node<Key, Value>& n) {
+        os << "hello";
+        return os;
+    }
+
 protected:
     std::pair<const Key, Value> item_;
     Node<Key, Value>* parent_;
@@ -250,7 +259,7 @@ protected:
 
 
 protected:
-    Node<Key, Value>* root_;
+    Node<Key, Value>* root_ = nullptr;
     // You should not need other data members
 };
 
@@ -435,6 +444,20 @@ Value const & BinarySearchTree<Key, Value>::operator[](const Key& key) const
     return curr->getValue();
 }
 
+template<class Key, class Value>
+Node<Key, Value>* get_leaf(Node<Key, Value>* root) {
+    if (root == nullptr) return nullptr;
+
+    // check children
+    if (root->getLeft() == nullptr && root->getRight() == nullptr) {
+        return root;
+    } else if (root->getLeft() == nullptr) {
+        return get_leaf(root->getRight());
+    } else {
+        return get_leaf(root->getLeft());
+    }
+}
+
 /**
 * An insert method to insert into a Binary Search Tree.
 * The tree will not remain balanced when inserting.
@@ -445,6 +468,24 @@ template<class Key, class Value>
 void BinarySearchTree<Key, Value>::insert(const std::pair<const Key, Value> &keyValuePair)
 {
     // TODO
+
+    // convert pair into a node
+    Node<Key, Value>* node = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, nullptr);
+
+    // make a new node if root is null
+    if (this->root_ == nullptr) {
+        root_ = node;
+        return;
+    }
+
+    // insert into leaf node of root
+    Node<Key, Value>* leaf = get_leaf(root_);
+    if (leaf->getLeft() == nullptr) {
+        leaf->setLeft(node);
+    } else {
+        leaf->setRight(node);
+    }
+
 }
 
 
@@ -457,6 +498,8 @@ template<typename Key, typename Value>
 void BinarySearchTree<Key, Value>::remove(const Key& key)
 {
     // TODO
+
+    return this->internalFind(key);
 }
 
 
@@ -490,6 +533,29 @@ BinarySearchTree<Key, Value>::getSmallestNode() const
     // TODO
 }
 
+// helper function to recursively find node based on key
+template<typename Key, typename Value>
+Node<Key, Value>* recursive_find(const Key& key, Node<Key, Value>* parent) {
+    // return if no parent
+    if (parent == nullptr) return nullptr;
+
+    // check if parent has correct val
+    if (parent->getKey() == key) {
+        return parent;
+    }
+
+    // search left subtree if value less than parent
+    if (key < parent->getKey()) {
+        return recursive_find(key, parent->getLeft());
+    }
+
+    // search right subtree if value greater than parent
+    if (key > parent->getKey()) {
+        return recursive_find(key, parent->getRight());
+    }
+
+}
+
 /**
 * Helper function to find a node with given key, k and
 * return a pointer to it or NULL if no item with that key
@@ -499,6 +565,11 @@ template<typename Key, typename Value>
 Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) const
 {
     // TODO
+
+    // base case if root i
+    Node<Key, Value>* n = recursive_find(key, root_);  // use helper to recurse tree
+    return n;
+
 }
 
 /**
