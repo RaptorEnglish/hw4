@@ -790,6 +790,23 @@ int tree_height(Node<Key, Value>* node) {
 
 }
 
+// helper function to recursively check if is balanced
+template<typename Key, typename Value>
+bool is_balanced_helper(Node<Key, Value>* node) {
+    // null root is balanced
+    if (!node) return true;
+
+    // get heights of root sub trees
+    int l_height = tree_height(node->getLeft());
+    int r_height = tree_height(node->getRight());
+
+    // get diff by subtracting larger from smaller
+    int diff = std::abs(r_height - l_height);
+    if (diff > 1) return false;
+
+    return is_balanced_helper(node->getLeft()) && is_balanced_helper(node->getRight());
+}
+
 
 /**
  * Return true iff the BST is balanced.
@@ -799,20 +816,8 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
 
-    // null root is balanced
-    if (!root_) return true;
-
-    // get heights of root sub trees
-    int l_height = tree_height(root_->getLeft());
-    int r_height = tree_height(root_->getRight());
-
-    // get diff by subtracting larger from smaller
-    int diff = (r_height > l_height) ? r_height - l_height : l_height - r_height;
-
-    // check to see if height diff is at most one
-    if (diff > 1) return false;
-
-    return true;
+    // use recursive helper function to determine if tree is balanced
+    return is_balanced_helper(root_);
 }
 
 template<typename Key, typename Value>

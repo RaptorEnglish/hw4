@@ -9,6 +9,17 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+    BinarySearchTree<uint16_t, uint16_t> testTree;
+
+    testTree.insert(std::make_pair(5, 8));
+    testTree.insert(std::make_pair(3, 159));
+    testTree.insert(std::make_pair(1, 9));
+    testTree.insert(std::make_pair(10, 0x5a));
+
+    testTree.insert(std::make_pair(15, 0xb));
+    testTree.insert(std::make_pair(4, 4));
+    testTree.insert(std::make_pair(17, 159));
+
     // Binary Search Tree tests
     BinarySearchTree<char,int> bt;
     bt.insert(std::make_pair('a',1));
