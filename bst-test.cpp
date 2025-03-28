@@ -31,13 +31,14 @@ int main(int argc, char *argv[])
     BinarySearchTree<int,int> bt2;
     bt2.insert(std::make_pair(4,4));
     bt2.insert(std::make_pair(5,2));
-    bt2.insert(std::make_pair(3,6));
-    bt2.insert(std::make_pair(6,1));
-    bt2.insert(std::make_pair(3,3));
-    bt2.insert(std::make_pair(5,5));
-    bt2.insert(std::make_pair(7,7));
-    bt2.insert(std::make_pair(12,7));
-    bt2.insert(std::make_pair(-3,7));
+    bt2.insert(std::make_pair(6,2));
+//    bt2.insert(std::make_pair(3,6));
+//    bt2.insert(std::make_pair(6,1));
+//    bt2.insert(std::make_pair(3,3));
+//    bt2.insert(std::make_pair(5,5));
+//    bt2.insert(std::make_pair(7,7));
+//    bt2.insert(std::make_pair(12,7));
+//    bt2.insert(std::make_pair(-3,7));
 
     for (auto it = bt2.begin(); it != bt2.end(); ++it) {
         std::cout << it->first << " ";
@@ -52,6 +53,8 @@ int main(int argc, char *argv[])
     } else {
         std::cout << "did not find value" << std::endl;
     }
+
+    std::cout << "balanced: " << bt2.isBalanced() << std::endl;
 
     // check remove
     bt2.remove(3);

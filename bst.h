@@ -771,6 +771,26 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 
 }
 
+// helper function to calculate height of subtree
+template<typename Key, typename Value>
+int tree_height(Node<Key, Value>* node) {
+    if (!node) {
+        return 0;
+    }
+
+    // calc height of left and right sub trees
+    int l_height = tree_height(node->getLeft());
+    int r_height = tree_height(node->getRight());
+
+    // return max height + 1
+    if (l_height > r_height) {
+        return l_height + 1;
+    }
+    return r_height + 1;
+
+}
+
+
 /**
  * Return true iff the BST is balanced.
  */
@@ -778,6 +798,21 @@ template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
     // TODO
+
+    // null root is balanced
+    if (!root_) return true;
+
+    // get heights of root sub trees
+    int l_height = tree_height(root_->getLeft());
+    int r_height = tree_height(root_->getRight());
+
+    // get diff by subtracting larger from smaller
+    int diff = (r_height > l_height) ? r_height - l_height : l_height - r_height;
+
+    // check to see if height diff is at most one
+    if (diff > 1) return false;
+
+    return true;
 }
 
 template<typename Key, typename Value>
