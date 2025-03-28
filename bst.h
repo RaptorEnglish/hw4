@@ -503,10 +503,11 @@ void insert_node(Node<Key, Value>* parent, Node<Key, Value>* n) {
     // over write if exists
     if (parent->getKey() == n->getKey()) {
         parent->setValue(n->getValue());
+        delete n;  // newly allocated node not needed anymore
     }
 
     // check left if inserted val is less than curr node
-    if (n->getKey() < parent->getKey()) {
+    else if (n->getKey() < parent->getKey()) {
         if (parent->getLeft()) {
             return insert_node(parent->getLeft(), n);
         } else {
@@ -799,6 +800,7 @@ bool is_balanced_helper(Node<Key, Value>* node) {
     // get heights of root sub trees
     int l_height = tree_height(node->getLeft());
     int r_height = tree_height(node->getRight());
+    std::cout << "Heights for " << node->getKey() << ": " << l_height << " " << r_height << std::endl;
 
     // get diff by subtracting larger from smaller
     int diff = std::abs(r_height - l_height);
@@ -817,6 +819,7 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
     // TODO
 
     // use recursive helper function to determine if tree is balanced
+    std::cout << "root: " << root_->getKey() << std::endl;
     return is_balanced_helper(root_);
 }
 

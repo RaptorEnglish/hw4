@@ -20,6 +20,9 @@ int main(int argc, char *argv[])
     testTree.insert(std::make_pair(4, 4));
     testTree.insert(std::make_pair(17, 159));
 
+    testTree.print();
+    std::cout << "checking balance: " << testTree.isBalanced() << std::endl;
+
     // Binary Search Tree tests
     BinarySearchTree<char,int> bt;
     bt.insert(std::make_pair('a',1));
@@ -43,6 +46,7 @@ int main(int argc, char *argv[])
     bt2.insert(std::make_pair(4,4));
     bt2.insert(std::make_pair(5,2));
     bt2.insert(std::make_pair(6,2));
+    bt2.insert(std::make_pair(6,5));
 //    bt2.insert(std::make_pair(3,6));
 //    bt2.insert(std::make_pair(6,1));
 //    bt2.insert(std::make_pair(3,3));
