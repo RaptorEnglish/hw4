@@ -290,7 +290,8 @@ template<class Key, class Value>
 BinarySearchTree<Key, Value>::iterator::iterator() 
 {
     // TODO
-    std::cout << "creating iterator" << std::endl;
+
+    current_ = nullptr;
 
 }
 
@@ -819,7 +820,6 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
     // TODO
 
     // use recursive helper function to determine if tree is balanced
-    std::cout << "root: " << root_->getKey() << std::endl;
     return is_balanced_helper(root_);
 }
 
