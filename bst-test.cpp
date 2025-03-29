@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
 //    testTree.insert(std::make_pair(17, 159));
 //
 //    testTree.print();
-//    std::cout << "checking balance: " << testTree.isBalanced() << std::endl;
-
+////    std::cout << "checking balance: " << testTree.isBalanced() << std::endl;
+//
 //    // Binary Search Tree tests
 //    BinarySearchTree<char,int> bt;
 //    bt.insert(std::make_pair('a',1));
@@ -88,18 +88,18 @@ int main(int argc, char *argv[])
 
     // AVL Tree Tests
     AVLTree<int, int> at;
-    for (int i = -5; i < -4; i++) {
+    for (int i = -5; i < 20; i++) {
         at.insert(std::make_pair(i, 9));
 
     }
-//    at.insert(std::make_pair(0, 8));
-//    at.insert(std::make_pair(-1, 8));
+    at.insert(std::make_pair(5, 8));
+    at.insert(std::make_pair(3, 8));
+    at.insert(std::make_pair(2, 8));
 //    at.insert(std::make_pair(-2, 8));
 //    at.insert(std::make_pair(4,4));
-//    at.insert(std::make_pair('e',2));
-//    at.insert(std::make_pair('z',2));
-//    at.insert(std::make_pair('r',2));
+
     at.print();
+//    at.clear();
 
 //    cout << "\nAVLTree contents:" << endl;
 //    for(AVLTree<int,int>::iterator it = at.begin(); it != at.end(); ++it) {

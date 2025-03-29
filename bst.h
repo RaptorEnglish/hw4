@@ -257,7 +257,7 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
-    int tree_height(Node<Key, Value>* node);
+//    int tree_height(Node<Key, Value>* node);
 
 
 public:
@@ -411,6 +411,7 @@ template<typename Key, typename Value>
 BinarySearchTree<Key, Value>::~BinarySearchTree()
 {
     // TODO
+
     this->clear();
 }
 
@@ -692,6 +693,7 @@ void recursive_clear(Node<Key, Value>* parent) {
     // delete after recursing
     delete parent;
 
+
 }
 
 
@@ -777,7 +779,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 
 // helper function to calculate height of subtree
 template<typename Key, typename Value>
-int BinarySearchTree<Key, Value>::tree_height(Node<Key, Value>* node) {
+int tree_height(Node<Key, Value>* node) {
     if (!node) {
         return 0;
     }

@@ -28,6 +28,10 @@ public:
     void setBalance (int8_t balance);
     void updateBalance(int8_t diff);
 
+    int getBalance2 () const;
+    void setBalance2 (int balance);
+    void updateBalance2(int diff);
+
     // Getters for parent, left, and right. These need to be redefined since they
     // return pointers to AVLNodes - not plain Nodes. See the Node class in bst.h
     // for more information.
@@ -37,6 +41,7 @@ public:
 
 protected:
     int8_t balance_;    // effectively a signed char
+    int bal_;  // balance is giving me strange behavior
 };
 
 /*
@@ -72,6 +77,11 @@ int8_t AVLNode<Key, Value>::getBalance() const
 {
     return balance_;
 }
+template<class Key, class Value>
+int AVLNode<Key, Value>::getBalance2() const
+{
+    return bal_;
+}
 
 /**
 * A setter for the balance of a AVLNode.
@@ -81,6 +91,11 @@ void AVLNode<Key, Value>::setBalance(int8_t balance)
 {
     balance_ = balance;
 }
+template<class Key, class Value>
+void AVLNode<Key, Value>::setBalance2(int balance)
+{
+    bal_ = balance;
+}
 
 /**
 * Adds diff to the balance of a AVLNode.
@@ -89,6 +104,11 @@ template<class Key, class Value>
 void AVLNode<Key, Value>::updateBalance(int8_t diff)
 {
     balance_ += diff;
+}
+template<class Key, class Value>
+void AVLNode<Key, Value>::updateBalance2(int diff)
+{
+    bal_ += diff;
 }
 
 /**
@@ -175,27 +195,26 @@ void AVLTree<Key, Value>::rotate_left(AVLNode<Key, Value> *node) {
     node->setParent(n1);
 
     // update balance factors
-    node->updateBalance(1);
-    n1->updateBalance(-1);
+    node->updateBalance2(1);
+    n1->updateBalance2(-1);;
 
 }
 
 // helper function to balance tree
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::balance(AVLNode<Key, Value> *node) {
-    int8_t b_factor = node->getBalance();
-//    std::cout << "balance" << b_factor << std::endl;
+    int b_factor = node->getBalance2();
 
     // handle cases
     if (b_factor > 1) {  // left heavy tree
-        if (node->getLeft()->getBalance() >= 0) {  // left-left (LL) case
+        if (node->getLeft()->getBalance2() >= 0) {  // left-left (LL) case
             rotate_right(node);
         } else { // left-right (LR) case
             rotate_left(node->getLeft());
             rotate_right(node);
         }
     } else if (b_factor < -1) {
-        if (node->getRight()->getBalance() <= 0) {  // right-right (RR) case
+        if (node->getRight()->getBalance2() <= 0) {  // right-right (RR) case
             rotate_left(node);
         } else { // right-left (RL) case
             rotate_right(node->getRight());
@@ -236,8 +255,8 @@ void AVLTree<Key, Value>::rotate_right(AVLNode<Key, Value> *node) {
     // update node's parent
     node->setParent(n1);
 
-    node->updateBalance(-1);
-    n1->updateBalance(1);
+    node->updateBalance2(-1);
+    n1->updateBalance2(1);
 }
 
 /*
@@ -252,26 +271,24 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     // use bst implementation to add node
     BinarySearchTree<Key, Value>::insert(new_item);
 
+
+
     // find node that was inserted
     AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
-    std::cout << "successfully inserted" << std::endl;
+    std::cout << "top" << std::endl;
+
 
     // use rotations to balance tree
     while (inserted) {
         // Update the height of the node
         int left_height = getSubtreeHeight(inserted->getLeft());
         int right_height = getSubtreeHeight(inserted->getRight());
-        std::cout << "heights: " << left_height << " " << right_height << std::endl;
-
 
         // Update balance factor
-        int b_factor = left_height - right_height;
-        inserted->setBalance(b_factor);
-        std::cout << "set balance" << std::endl;
-
-        // update balance
-        balance(inserted);
-        std::cout << "successfully balanced" << std::endl;
+//        inserted->setBalance2(left_height - right_height);
+//
+//        // update balance
+//        balance(inserted);
 
         // call again on parent
         inserted = inserted->getParent();
