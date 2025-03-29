@@ -137,9 +137,108 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
+    void balance(AVLNode<Key, Value>* node);
+    void rotate_right(AVLNode<Key, Value>* node);
+    void rotate_left(AVLNode<Key, Value>* node);
 
 
 };
+
+// helper function to rotate a node left
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::rotate_left(AVLNode<Key, Value> *node) {
+    // exit if rotation not possible
+    if (!node || !node->getRight()) return;
+
+    // get elements to use in rotation
+    AVLNode<Key, Value>* parent = node->getParent();
+    AVLNode<Key, Value>* n1 = node->getRight();
+    AVLNode<Key, Value>* t1 = n1->getLeft();
+
+    // point at grandchild
+    node->setRight(t1);
+    if (t1) t1->setParent(node);
+
+    // swap node with left child
+    n1->setParent(parent);
+    n1->setLeft(node);
+
+    // update parent pointer
+    if (parent) {
+        if (parent->getLeft() == node) parent->setLeft(n1);
+        else parent->setRight(n1);
+    } else {
+        this->root_ = n1;
+    }
+
+    // update node's parent
+    node->setParent(n1);
+
+    // update balance factors
+    node->updateBalance(1);
+    n1->updateBalance(-1);
+
+}
+
+// helper function to balance tree
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::balance(AVLNode<Key, Value> *node) {
+    int8_t b_factor = node->getBalance();
+//    std::cout << "balance" << b_factor << std::endl;
+
+    // handle cases
+    if (b_factor > 1) {  // left heavy tree
+        if (node->getLeft()->getBalance() >= 0) {  // left-left (LL) case
+            rotate_right(node);
+        } else { // left-right (LR) case
+            rotate_left(node->getLeft());
+            rotate_right(node);
+        }
+    } else if (b_factor < -1) {
+        if (node->getRight()->getBalance() <= 0) {  // right-right (RR) case
+            rotate_left(node);
+        } else { // right-left (RL) case
+            rotate_right(node->getRight());
+            rotate_left(node);
+        }
+
+    }
+
+}
+
+// helper function to rotate a node left
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::rotate_right(AVLNode<Key, Value> *node) {
+    // exit if rotation not possible
+    if (!node || !node->getLeft()) return;
+
+    // get elements to use in rotation
+    AVLNode<Key, Value>* parent = node->getParent();
+    AVLNode<Key, Value>* n1 = node->getLeft();
+    AVLNode<Key, Value>* t1 = n1->getRight();
+
+    // point at grandchild
+    node->setLeft(t1);
+    if (t1) t1->setParent(node);
+
+    // swap node with left child
+    n1->setParent(parent);
+    n1->setRight(node);
+
+    // update parent pointer
+    if (parent) {
+        if (parent->getLeft() == node) parent->setLeft(n1);
+        else parent->setRight(n1);
+    } else {
+        this->root_ = n1;
+    }
+
+    // update node's parent
+    node->setParent(n1);
+
+    node->updateBalance(-1);
+    n1->updateBalance(1);
+}
 
 /*
  * Recall: If key is already in the tree, you should 
@@ -149,6 +248,32 @@ template<class Key, class Value>
 void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
+
+    // use bst implementation to add node
+    BinarySearchTree<Key, Value>::insert(new_item);
+
+    // find node that was inserted
+    AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
+
+    // use rotations to balance tree
+    while (inserted) {
+        // Update the height of the node
+        int left_height = getSubtreeHeight(inserted->getLeft());
+        int right_height = getSubtreeHeight(inserted->getRight());
+
+
+        // Update balance factor
+        int b_factor = left_height - right_height;
+        inserted->setBalance(b_factor);
+
+        // update balance
+        balance(inserted);
+
+        // call again on parent
+        inserted = inserted->getParent();
+
+    }
+
 }
 
 /*
@@ -159,6 +284,12 @@ template<class Key, class Value>
 void AVLTree<Key, Value>:: remove(const Key& key)
 {
     // TODO
+
+    // use bst implementation to remove node
+    BinarySearchTree<Key, Value>::remove(key);
+
+    // use rebalancing functions
+
 }
 
 template<class Key, class Value>

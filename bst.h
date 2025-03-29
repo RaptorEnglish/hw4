@@ -257,6 +257,8 @@ protected:
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
 
     // Add helper functions here
+    int tree_height(Node<Key, Value>* node);
+
 
 public:
     void print_tree() const;
@@ -775,7 +777,7 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 
 // helper function to calculate height of subtree
 template<typename Key, typename Value>
-int tree_height(Node<Key, Value>* node) {
+int BinarySearchTree<Key, Value>::tree_height(Node<Key, Value>* node) {
     if (!node) {
         return 0;
     }
@@ -792,6 +794,7 @@ int tree_height(Node<Key, Value>* node) {
 
 }
 
+
 // helper function to recursively check if is balanced
 template<typename Key, typename Value>
 bool is_balanced_helper(Node<Key, Value>* node) {
@@ -801,7 +804,6 @@ bool is_balanced_helper(Node<Key, Value>* node) {
     // get heights of root sub trees
     int l_height = tree_height(node->getLeft());
     int r_height = tree_height(node->getRight());
-    std::cout << "Heights for " << node->getKey() << ": " << l_height << " " << r_height << std::endl;
 
     // get diff by subtracting larger from smaller
     int diff = std::abs(r_height - l_height);
