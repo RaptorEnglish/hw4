@@ -254,20 +254,24 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 
     // find node that was inserted
     AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
+    std::cout << "successfully inserted" << std::endl;
 
     // use rotations to balance tree
     while (inserted) {
         // Update the height of the node
         int left_height = getSubtreeHeight(inserted->getLeft());
         int right_height = getSubtreeHeight(inserted->getRight());
+        std::cout << "heights: " << left_height << " " << right_height << std::endl;
 
 
         // Update balance factor
         int b_factor = left_height - right_height;
         inserted->setBalance(b_factor);
+        std::cout << "set balance" << std::endl;
 
         // update balance
         balance(inserted);
+        std::cout << "successfully balanced" << std::endl;
 
         // call again on parent
         inserted = inserted->getParent();

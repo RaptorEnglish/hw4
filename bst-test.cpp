@@ -87,33 +87,32 @@ int main(int argc, char *argv[])
 
 
     // AVL Tree Tests
-    AVLTree<char, int> at;
-    at.insert(std::make_pair('a',1));
-    at.insert(std::make_pair('b',2));
-    at.insert(std::make_pair('c',3));
-    at.insert(std::make_pair('d',4));
-    at.insert(std::make_pair('e',4));
-    at.insert(std::make_pair('f',2));
-    at.insert(std::make_pair('g',2));
-    at.insert(std::make_pair('h',2));
-    at.insert(std::make_pair('i',2));
+    AVLTree<int, int> at;
+    for (int i = -5; i < -4; i++) {
+        at.insert(std::make_pair(i, 9));
+
+    }
+//    at.insert(std::make_pair(0, 8));
+//    at.insert(std::make_pair(-1, 8));
+//    at.insert(std::make_pair(-2, 8));
+//    at.insert(std::make_pair(4,4));
 //    at.insert(std::make_pair('e',2));
 //    at.insert(std::make_pair('z',2));
 //    at.insert(std::make_pair('r',2));
     at.print();
 
-    cout << "\nAVLTree contents:" << endl;
-    for(AVLTree<char,int>::iterator it = at.begin(); it != at.end(); ++it) {
-        cout << it->first << " " << it->second << endl;
-    }
-    if(at.find('b') != at.end()) {
-        cout << "Found b" << endl;
-    }
-    else {
-        cout << "Did not find b" << endl;
-    }
-    cout << "Erasing b" << endl;
-    at.remove('b');
+//    cout << "\nAVLTree contents:" << endl;
+//    for(AVLTree<int,int>::iterator it = at.begin(); it != at.end(); ++it) {
+//        cout << it->first << " " << it->second << endl;
+//    }
+//    if(at.find('b') != at.end()) {
+//        cout << "Found b" << endl;
+//    }
+//    else {
+//        cout << "Did not find b" << endl;
+//    }
+//    cout << "Erasing b" << endl;
+//    at.remove('b');
 
     return 0;
 }
