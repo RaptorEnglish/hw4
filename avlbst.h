@@ -289,16 +289,16 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 {
     // TODO
 
-    // use bst implementation to add node
-    BinarySearchTree<Key, Value>::insert(new_item);
-
-
-    // find node that was inserted
-    AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
-
-
-    // use rotations to balance tree
-    update_avl(inserted);
+//    // use bst implementation to add node
+//    BinarySearchTree<Key, Value>::insert(new_item);
+//
+//
+//    // find node that was inserted
+//    AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
+//
+//
+//    // use rotations to balance tree
+//    update_avl(inserted);
 
 }
 
@@ -311,19 +311,19 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 {
     // TODO
 
-    // first find node
-    AVLNode<Key, Value>* node = static_cast<AVLNode<Key, Value>*>(this->internalFind(key));
-    if (!node) return;
-
-    // get parent
-    AVLNode<Key, Value>* parent = node->getParent();
-
-    // use bst implementation to remove node
-    BinarySearchTree<Key, Value>::remove(key);
-
-
-    // rebalance
-    update_avl(parent);
+//    // first find node
+//    AVLNode<Key, Value>* node = static_cast<AVLNode<Key, Value>*>(this->internalFind(key));
+//    if (!node) return;
+//
+//    // get parent
+//    AVLNode<Key, Value>* parent = node->getParent();
+//
+//    // use bst implementation to remove node
+//    BinarySearchTree<Key, Value>::remove(key);
+//
+//
+//    // rebalance
+//    update_avl(parent);
 
 }
 
