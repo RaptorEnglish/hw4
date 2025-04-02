@@ -41,7 +41,7 @@ public:
 
 protected:
     int8_t balance_;    // effectively a signed char
-    int bal_;  // balance is giving me strange behavior
+    // int bal_;  // balance is giving me strange behavior
 };
 
 /*
@@ -263,21 +263,22 @@ void AVLTree<Key, Value>::rotate_right(AVLNode<Key, Value> *node) {
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::update_avl(AVLNode<Key, Value>* node) {
     // use rotations to balance tree
-    while (node) {
-        // Update the height of the node
-        int left_height = getSubtreeHeight(node->getLeft());
-        int right_height = getSubtreeHeight(node->getRight());
+    node->setBalance(3);
+    // while (node) {
+    //     // Update the height of the node
+    //     int left_height = getSubtreeHeight(node->getLeft());
+    //     int right_height = getSubtreeHeight(node->getRight());
 
-        // Update balance factor
-        node->setBalance(left_height - right_height);
+    //     // Update balance factor
+    //     // node->setBalance(left_height - right_height);
 
-        // update balance
-        balance(node);
+    //     // update balance
+    //     // balance(node);
 
-        // call again on parent
-        node = node->getParent();
+    //     // call again on parent
+    //     node = node->getParent();
 
-    }
+    // }
 }
 
 /*
