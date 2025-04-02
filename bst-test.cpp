@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
   //   at.clear();
   // //  at.remove(3);
 
-  //   at.print();
+     at.print();
 
   //  at.clear();
 

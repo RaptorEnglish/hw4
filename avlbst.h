@@ -281,6 +281,29 @@ void AVLTree<Key, Value>::update_avl(AVLNode<Key, Value>* node) {
     // }
 }
 
+// helper function to recursively find node based on key
+template<typename Key, typename Value>
+AVLNode<Key, Value>* rfind(const Key& key, AVLNode<Key, Value>* parent) {
+    // return if no parent
+    if (parent == nullptr) return nullptr;
+
+    // check if parent has correct val
+    else if (parent->getKey() == key) {
+        return parent;
+    }
+
+    // search left subtree if value less than parent
+    else if (key < parent->getKey()) {
+        return rfind(key, parent->getLeft());
+    }
+
+    // search right subtree if value greater than parent
+    else if (key > parent->getKey()) {
+        return rfind(key, parent->getRight());
+    }
+
+}
+
 /*
  * Recall: If key is already in the tree, you should
  * overwrite the current value with the updated value.
@@ -295,7 +318,7 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 
 
     // find node that was inserted
-    AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
+    AVLNode<Key, Value>* inserted = rfind(new_item.first, static_cast<AVLNode<Key, Value>*>(this->root_));
 
 
     // use rotations to balance tree
