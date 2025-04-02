@@ -28,9 +28,9 @@ public:
     void setBalance (int8_t balance);
     void updateBalance(int8_t diff);
 
-    int getBalance2 () const;
-    void setBalance2 (int balance);
-    void updateBalance2(int diff);
+//    int getBalance2 () const;
+//    void setBalance2 (int balance);
+//    void updateBalance2(int diff);
 
     // Getters for parent, left, and right. These need to be redefined since they
     // return pointers to AVLNodes - not plain Nodes. See the Node class in bst.h
@@ -55,7 +55,7 @@ protected:
 */
 template<class Key, class Value>
 AVLNode<Key, Value>::AVLNode(const Key& key, const Value& value, AVLNode<Key, Value> *parent) :
-    Node<Key, Value>(key, value, parent), balance_(0)
+        Node<Key, Value>(key, value, parent), balance_(0)
 {
 
 }
@@ -77,11 +77,11 @@ int8_t AVLNode<Key, Value>::getBalance() const
 {
     return balance_;
 }
-template<class Key, class Value>
-int AVLNode<Key, Value>::getBalance2() const
-{
-    return bal_;
-}
+//template<class Key, class Value>
+//int AVLNode<Key, Value>::getBalance2() const
+//{
+//    return bal_;
+//}
 
 /**
 * A setter for the balance of a AVLNode.
@@ -91,11 +91,11 @@ void AVLNode<Key, Value>::setBalance(int8_t balance)
 {
     balance_ = balance;
 }
-template<class Key, class Value>
-void AVLNode<Key, Value>::setBalance2(int balance)
-{
-    bal_ = balance;
-}
+//template<class Key, class Value>
+//void AVLNode<Key, Value>::setBalance2(int balance)
+//{
+//    bal_ = balance;
+//}
 
 /**
 * Adds diff to the balance of a AVLNode.
@@ -105,11 +105,11 @@ void AVLNode<Key, Value>::updateBalance(int8_t diff)
 {
     balance_ += diff;
 }
-template<class Key, class Value>
-void AVLNode<Key, Value>::updateBalance2(int diff)
-{
-    bal_ += diff;
-}
+//template<class Key, class Value>
+//void AVLNode<Key, Value>::updateBalance2(int diff)
+//{
+//    bal_ += diff;
+//}
 
 /**
 * An overridden function for getting the parent since a static_cast is necessary to make sure
@@ -158,6 +158,7 @@ protected:
 
     // Add helper functions here
     void balance(AVLNode<Key, Value>* node);
+    void update_avl(AVLNode<Key, Value>* node);
     void rotate_right(AVLNode<Key, Value>* node);
     void rotate_left(AVLNode<Key, Value>* node);
 
@@ -195,26 +196,26 @@ void AVLTree<Key, Value>::rotate_left(AVLNode<Key, Value> *node) {
     node->setParent(n1);
 
     // update balance factors
-    node->updateBalance2(1);
-    n1->updateBalance2(-1);;
+    node->updateBalance(1);
+    n1->updateBalance(-1);;
 
 }
 
 // helper function to balance tree
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::balance(AVLNode<Key, Value> *node) {
-    int b_factor = node->getBalance2();
+    int b_factor = node->getBalance();
 
     // handle cases
     if (b_factor > 1) {  // left heavy tree
-        if (node->getLeft()->getBalance2() >= 0) {  // left-left (LL) case
+        if (node->getLeft()->getBalance() >= 0) {  // left-left (LL) case
             rotate_right(node);
         } else { // left-right (LR) case
             rotate_left(node->getLeft());
             rotate_right(node);
         }
     } else if (b_factor < -1) {
-        if (node->getRight()->getBalance2() <= 0) {  // right-right (RR) case
+        if (node->getRight()->getBalance() <= 0) {  // right-right (RR) case
             rotate_left(node);
         } else { // right-left (RL) case
             rotate_right(node->getRight());
@@ -255,12 +256,32 @@ void AVLTree<Key, Value>::rotate_right(AVLNode<Key, Value> *node) {
     // update node's parent
     node->setParent(n1);
 
-    node->updateBalance2(-1);
-    n1->updateBalance2(1);
+    node->updateBalance(-1);
+    n1->updateBalance(1);
+}
+
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::update_avl(AVLNode<Key, Value>* node) {
+    // use rotations to balance tree
+    while (node) {
+        // Update the height of the node
+        int left_height = getSubtreeHeight(node->getLeft());
+        int right_height = getSubtreeHeight(node->getRight());
+
+        // Update balance factor
+        node->setBalance(left_height - right_height);
+
+        // update balance
+        balance(node);
+
+        // call again on parent
+        node = node->getParent();
+
+    }
 }
 
 /*
- * Recall: If key is already in the tree, you should 
+ * Recall: If key is already in the tree, you should
  * overwrite the current value with the updated value.
  */
 template<class Key, class Value>
@@ -272,28 +293,12 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
     BinarySearchTree<Key, Value>::insert(new_item);
 
 
-
     // find node that was inserted
     AVLNode<Key, Value>* inserted = static_cast<AVLNode<Key, Value>*>(this->internalFind(new_item.first));
-    std::cout << "top" << std::endl;
 
 
     // use rotations to balance tree
-    while (inserted) {
-        // Update the height of the node
-        int left_height = getSubtreeHeight(inserted->getLeft());
-        int right_height = getSubtreeHeight(inserted->getRight());
-
-        // Update balance factor
-//        inserted->setBalance2(left_height - right_height);
-//
-//        // update balance
-//        balance(inserted);
-
-        // call again on parent
-        inserted = inserted->getParent();
-
-    }
+    update_avl(inserted);
 
 }
 
@@ -306,10 +311,19 @@ void AVLTree<Key, Value>:: remove(const Key& key)
 {
     // TODO
 
+    // first find node
+    AVLNode<Key, Value>* node = static_cast<AVLNode<Key, Value>*>(this->internalFind(key));
+    if (!node) return;
+
+    // get parent
+    AVLNode<Key, Value>* parent = node->getParent();
+
     // use bst implementation to remove node
     BinarySearchTree<Key, Value>::remove(key);
 
-    // use rebalancing functions
+
+    // rebalance
+    update_avl(parent);
 
 }
 

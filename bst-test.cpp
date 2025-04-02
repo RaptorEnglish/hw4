@@ -88,17 +88,24 @@ int main(int argc, char *argv[])
 
     // AVL Tree Tests
     AVLTree<int, int> at;
-    for (int i = -5; i < 20; i++) {
-        at.insert(std::make_pair(i, 9));
-
-    }
-    at.insert(std::make_pair(5, 8));
+//    for (int i = 0; i < 10; i++) {
+//        at.insert(std::make_pair(i, 9));
+//
+//    }
+    at.insert(std::make_pair(5, 8));;
+    at.insert(std::make_pair(4, 4));
     at.insert(std::make_pair(3, 8));
     at.insert(std::make_pair(2, 8));
-//    at.insert(std::make_pair(-2, 8));
-//    at.insert(std::make_pair(4,4));
+    at.insert(std::make_pair(1, 8));
+
+
+//    at.print();
+
+    at.clear();
+//    at.remove(3);
 
     at.print();
+
 //    at.clear();
 
 //    cout << "\nAVLTree contents:" << endl;
