@@ -35,12 +35,9 @@ public:
     virtual AVLNode<Key, Value>* getLeft() const override;
     virtual AVLNode<Key, Value>* getRight() const override;
 
-    void set_height(int height) { height_ = height; }
-    int get_height() { return height_; }
-
 protected:
     int8_t balance_;    // effectively a signed char
-    int height_;
+//    int height_;
 
 };
 
@@ -55,7 +52,7 @@ protected:
 */
 template<class Key, class Value>
 AVLNode<Key, Value>::AVLNode(const Key& key, const Value& value, AVLNode<Key, Value> *parent) :
-        Node<Key, Value>(key, value, parent), balance_(0), height_(0)
+        Node<Key, Value>(key, value, parent), balance_(0)
 {
 
 }
@@ -211,8 +208,8 @@ void AVLTree<Key, Value>::rotate_left(AVLNode<Key, Value> *node) {
     node->setParent(n1);
 
     // update balance factors
-//    node->updateBalance(-1);
-//    n1->updateBalance(1);;
+    node->updateBalance(-1);
+    n1->updateBalance(1);;
 //    if(t1)t1->updateBalance(3);
 
 }
@@ -247,8 +244,8 @@ void AVLTree<Key, Value>::rotate_right(AVLNode<Key, Value> *node) {
     // update node's parent
     node->setParent(n1);
 
-//    node->updateBalance(1);
-//    n1->updateBalance(-1);
+    node->updateBalance(1);
+    n1->updateBalance(-1);
 //    if(t1)t1->updateBalance(3);
 }
 
@@ -279,11 +276,17 @@ void AVLTree<Key, Value>::balance_avl(AVLNode<Key, Value> *node) {
 
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::update_avl(AVLNode<Key, Value>* node) {
-    return;
+    // return;
+//    update_heights(static_cast<AVLNode<Key, Value>*>(this->root_));
+
     // use rotations to balance tree
     while (node != nullptr) {
+        int left_height = getSubtreeHeight(node->getLeft(), 3);
+        int right_height = getSubtreeHeight(node->getRight(), 3);
+        node->setBalance(left_height - right_height);
+
         // Update the height of the node
-        update_heights(node);
+//        update_heights(node);
 
         // update balance
         balance_avl(node);

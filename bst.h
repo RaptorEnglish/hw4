@@ -35,21 +35,16 @@ public:
     void setRight(Node<Key, Value>* right);
     void setValue(const Value &value);
 
-    // print node
-
-    void print_node() {
-        std::cout << this->getKey() << ": " << this->getValue() << std::endl;
-    }
-//    friend std::ostream& operator<<(std::ostream& os, const Node<Key, Value>& n) {
-//        os << "hello";
-//        return os;
-//    }
+    // height functions
+    void set_height(int height) { height_ = height; }
+    int get_height() { return height_; }
 
 protected:
     std::pair<const Key, Value> item_;
     Node<Key, Value>* parent_;
     Node<Key, Value>* left_;
     Node<Key, Value>* right_;
+    int height_;
 };
 
 /*
@@ -66,7 +61,8 @@ Node<Key, Value>::Node(const Key& key, const Value& value, Node<Key, Value>* par
     item_(key, value),
     parent_(parent),
     left_(NULL),
-    right_(NULL)
+    right_(NULL),
+    height_(0)
 {
 
 }
@@ -289,7 +285,7 @@ BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr)
 * A default constructor that initializes the iterator to NULL.
 */
 template<class Key, class Value>
-BinarySearchTree<Key, Value>::iterator::iterator() 
+BinarySearchTree<Key, Value>::iterator::iterator()
 {
     // TODO
 
@@ -401,7 +397,7 @@ Begin implementations for the BinarySearchTree class.
 * Default constructor for a BinarySearchTree, which sets the root to NULL.
 */
 template<class Key, class Value>
-BinarySearchTree<Key, Value>::BinarySearchTree() 
+BinarySearchTree<Key, Value>::BinarySearchTree()
 {
     // TODO
     root_ = nullptr;
@@ -529,6 +525,11 @@ void insert_node(Node<Key, Value>* parent, Node<Key, Value>* n) {
             n->setParent(parent);
         }
     }
+
+    // Update the height of the current node after insertion
+    int left_height = (parent->getLeft()) ? parent->getLeft()->get_height() : 0;
+    int right_height = (parent->getRight()) ? parent->getRight()->get_height() : 0;
+    parent->set_height(1 + std::max(left_height, right_height));
 }
 
 
@@ -536,7 +537,7 @@ void insert_node(Node<Key, Value>* parent, Node<Key, Value>* n) {
 /**
 * An insert method to insert into a Binary Search Tree.
 * The tree will not remain balanced when inserting.
-* Recall: If key is already in the tree, you should 
+* Recall: If key is already in the tree, you should
 * overwrite the current value with the updated value.
 */
 template<class Key, class Value>
@@ -582,6 +583,12 @@ void BinarySearchTree<Key, Value>::remove(const Key& key)
             Node<Key, Value>* parent = node->getParent();
             if (parent->getRight() == node) parent->setRight(nullptr);
             else parent->setLeft(nullptr);
+
+            // Update the height of the current node after removal
+            int left_height = (parent->getLeft()) ? parent->getLeft()->get_height() : 0;
+            int right_height = (parent->getRight()) ? parent->getRight()->get_height() : 0;
+            parent->set_height(1 + std::max(left_height, right_height));
+
         }
         delete node;
 
