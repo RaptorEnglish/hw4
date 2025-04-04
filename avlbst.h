@@ -176,7 +176,7 @@ void AVLTree<Key, Value>::update_heights(AVLNode<Key, Value>* node) {
     node->setBalance(left_height - right_height);
 
     // Update height (1 + max of left and right subtree heights)
-    node->set_height(std::max(left_height, right_height) + 1);
+    node->set_height(std::max(left_height, right_height) + 1);;
 }
 
 
