@@ -35,8 +35,12 @@ public:
     virtual AVLNode<Key, Value>* getLeft() const override;
     virtual AVLNode<Key, Value>* getRight() const override;
 
+    void set_height(int height) { height_ = height; }
+    int get_height() { return height_; }
+
 protected:
     int8_t balance_;    // effectively a signed char
+    int height_;
 
 };
 
@@ -51,7 +55,7 @@ protected:
 */
 template<class Key, class Value>
 AVLNode<Key, Value>::AVLNode(const Key& key, const Value& value, AVLNode<Key, Value> *parent) :
-        Node<Key, Value>(key, value, parent), balance_(0)
+        Node<Key, Value>(key, value, parent), balance_(0), height_(0)
 {
 
 }
@@ -156,16 +160,23 @@ template<typename Key, typename Value>
 void AVLTree<Key, Value>::update_heights(AVLNode<Key, Value>* node) {
     if (node == nullptr) return;
 
-    int left_height = getSubtreeHeight(node->getLeft());
-    int right_height = getSubtreeHeight(node->getRight());
+    // First, update the height of the children
+    if (node->getLeft()) {
+        update_heights(node->getLeft());
+    }
+    if (node->getRight()) {
+        update_heights(node->getRight());
+    }
 
-    // update balance
+    // Now update the height and balance of the current node
+    int left_height = (node->getLeft() != nullptr) ? node->getLeft()->get_height() : 0;
+    int right_height = (node->getRight() != nullptr) ? node->getRight()->get_height() : 0;
+
+    // Update balance factor (difference between left and right subtrees)
     node->setBalance(left_height - right_height);
 
-    // update heights for sub trees
-    update_heights(node->getLeft());
-    update_heights(node->getRight());
-
+    // Update height (1 + max of left and right subtree heights)
+    node->set_height(std::max(left_height, right_height) + 1);
 }
 
 
