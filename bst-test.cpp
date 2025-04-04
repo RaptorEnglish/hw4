@@ -93,10 +93,10 @@ int main(int argc, char *argv[])
 //
 //    }
     at.insert(std::make_pair(5, 8));;
-    // at.insert(std::make_pair(4, 4));
-    // at.insert(std::make_pair(3, 8));
-    // at.insert(std::make_pair(2, 8));
-    // at.insert(std::make_pair(1, 8));
+    at.insert(std::make_pair(4, 4));
+    at.insert(std::make_pair(3, 8));
+    at.insert(std::make_pair(2, 8));
+    at.insert(std::make_pair(1, 8));
 
 
   //  at.print();
