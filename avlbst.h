@@ -281,8 +281,8 @@ void AVLTree<Key, Value>::update_avl(AVLNode<Key, Value>* node) {
 
     // use rotations to balance tree
     while (node != nullptr) {
-        int left_height = getSubtreeHeight(node->getLeft(), 3);
-        int right_height = getSubtreeHeight(node->getRight(), 3);
+        int left_height = getSubtreeHeight(node->getLeft());
+        int right_height = getSubtreeHeight(node->getRight());
         node->setBalance(left_height - right_height);
 
         // Update the height of the node
